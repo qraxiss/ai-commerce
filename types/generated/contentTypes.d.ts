@@ -855,7 +855,7 @@ export interface ApiCartCart extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    items: Attribute.Relation<
+    products: Attribute.Relation<
       'api::cart.cart',
       'oneToMany',
       'api::product.product'

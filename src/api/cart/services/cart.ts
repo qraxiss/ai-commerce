@@ -5,23 +5,23 @@
 import { factories } from "@strapi/strapi";
 import { getId } from "../../../helpers/id";
 const services = () => ({
-  async addToCart({ productId }) {
-    const { id } = await strapi.service("api::cart.cart").getUserCart();
-    return strapi.entityService.update("api::cart.cart", id, {
+  async addToCart({ id }) {
+    const { id: cartId } = await strapi.service("api::cart.cart").getUserCart();
+    return strapi.entityService.update("api::cart.cart", cartId, {
       data: {
-        items: {
-          connect: [productId],
+        products: {
+          connect: [id],
         },
       },
     });
   },
 
-  async removeFromCart({ productId }) {
-    const { id } = await strapi.service("api::cart.cart").getUserCart();
-    return strapi.entityService.update("api::cart.cart", id, {
+  async removeFromCart({ id }) {
+    const { id: cartId } = await strapi.service("api::cart.cart").getUserCart();
+    return strapi.entityService.update("api::cart.cart", cartId, {
       data: {
-        items: {
-          disconnect: [productId],
+        products: {
+          disconnect: [id],
         },
       },
     });

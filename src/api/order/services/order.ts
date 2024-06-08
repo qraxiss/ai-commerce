@@ -24,6 +24,21 @@ const services = () => ({
 
     return order;
   },
+
+  async getUserOrders() {
+    return strapi.db.query("plugin::users-permissions.user").findOne({
+      where: {
+        id: getId(),
+      },
+      populate: {
+        orders: {
+          populate: {
+            cart: "*",
+          },
+        },
+      },
+    });
+  },
 });
 
 export default factories.createCoreService("api::order.order", services);
