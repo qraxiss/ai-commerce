@@ -17,7 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     Query: {
       userCart: {
         resolve: async (obj, args, context) => {
-          return await strapi.service("api::cart.cart").getUserCart();
+          return await strapi.service("api::cart.cart").userCart();
         },
       },
     },

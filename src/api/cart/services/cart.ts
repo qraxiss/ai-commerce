@@ -6,7 +6,7 @@ import { factories } from "@strapi/strapi";
 import { getId } from "../../../helpers/id";
 const services = () => ({
   async addToCart({ id }) {
-    const { id: cartId } = await strapi.service("api::cart.cart").getUserCart();
+    const { id: cartId } = await strapi.service("api::cart.cart").userCart();
     return strapi.entityService.update("api::cart.cart", cartId, {
       data: {
         products: {
@@ -17,7 +17,7 @@ const services = () => ({
   },
 
   async removeFromCart({ id }) {
-    const { id: cartId } = await strapi.service("api::cart.cart").getUserCart();
+    const { id: cartId } = await strapi.service("api::cart.cart").userCart();
     return strapi.entityService.update("api::cart.cart", cartId, {
       data: {
         products: {
@@ -27,8 +27,15 @@ const services = () => ({
     });
   },
 
-  async getUserCart() {
-    return await strapi.entityService.findOne("api::cart.cart", getId());
+  async userCart() {
+    return await strapi.db.query("api::cart.cart").findOne({
+      where: {
+        user: getId(),
+      },
+      populate: {
+        products: "*",
+      },
+    });
   },
 });
 
