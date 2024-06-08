@@ -844,6 +844,7 @@ export interface ApiCartCart extends Schema.CollectionType {
     singularName: 'cart';
     pluralName: 'carts';
     displayName: 'cart';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -854,7 +855,7 @@ export interface ApiCartCart extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    products: Attribute.Relation<
+    items: Attribute.Relation<
       'api::cart.cart',
       'oneToMany',
       'api::product.product'
