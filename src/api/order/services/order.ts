@@ -7,7 +7,13 @@ import { getId } from "../../../helpers/id";
 
 const services = () => ({
   async payment() {
-    const { id: cart } = await strapi.service("api::cart.cart").getUserCart();
+    const { id: cart, products } = await strapi
+      .service("api::cart.cart")
+      .userCart();
+
+    if (products.length === 0) {
+      throw new Error("There is no item on cart!")
+    }
 
     const order = await strapi.entityService.create("api::order.order", {
       data: {
@@ -22,22 +28,35 @@ const services = () => ({
       },
     });
 
-    return order;
-  },
-
-  async getUserOrders() {
-    return strapi.db.query("plugin::users-permissions.user").findOne({
+    await strapi.db.query("plugin::users-permissions.user").update({
       where: {
         id: getId(),
       },
-      populate: {
-        orders: {
-          populate: {
-            cart: "*",
-          },
+      data: {
+        cart: {
+          connect: newCart.id,
         },
       },
     });
+
+    return order;
+  },
+
+  async userOrders() {
+    return (
+      await strapi.db.query("plugin::users-permissions.user").findOne({
+        where: {
+          id: getId(),
+        },
+        populate: {
+          orders: {
+            populate: {
+              cart: "*",
+            },
+          },
+        },
+      })
+    ).orders;
   },
 });
 
