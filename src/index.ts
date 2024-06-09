@@ -1,5 +1,3 @@
-import { registerResolvers } from "./graphql";
-
 export default {
   /**
    * An asynchronous register function that runs before
@@ -7,9 +5,7 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/*{ strapi }*/) {
-    registerResolvers();
-  },
+  register(/*{ strapi }*/) {},
 
   /**
    * An asynchronous bootstrap function that runs before
