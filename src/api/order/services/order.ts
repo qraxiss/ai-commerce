@@ -12,7 +12,7 @@ const services = () => ({
       .userCart();
 
     if (products.length === 0) {
-      throw new Error("There is no item on cart!")
+      throw new Error("There is no item on cart!");
     }
 
     const order = await strapi.entityService.create("api::order.order", {
