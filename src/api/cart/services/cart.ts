@@ -9,6 +9,7 @@ const populate = {
   products: {
     populate: {
       categories: true,
+      image: true,
     },
   },
 };
