@@ -40,6 +40,10 @@
       "relation": "manyToMany",
       "target": "api::category.category",
       "mappedBy": "products"
+    },
+    "translate": {
+      "type": "string",
+      "unique": false
     }
   }
 }
