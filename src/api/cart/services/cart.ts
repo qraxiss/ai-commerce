@@ -18,16 +18,20 @@ const services = () => ({
 
   async addToCart({ id }) {
     let cart = await strapi.service("api::cart.cart").userCart();
+    // console.log("Cart: ", cart)
+
 
     if (!cart) {
       cart = await strapi.entityService.create("api::cart.cart", {
         data: {
+          user: getId(),
           products: [],
         },
       });
     }
 
-    const { id: cartId } = await strapi.service("api::cart.cart").userCart();
+    const { id: cartId } = cart; 
+    // await strapi.service("api::cart.cart").userCart();
     return strapi.entityService.update("api::cart.cart", cartId, {
       data: {
         products: {
