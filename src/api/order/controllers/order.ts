@@ -14,5 +14,12 @@ export default factories.createCoreController(
         ctx.throw(error.message, 400);
       }
     },
+    async makeSuggest(ctx) {
+      try {
+        ctx.body = await strapi.service("api::order.order").makeSuggest();
+      } catch (error: any) {
+        ctx.throw(error.message, 400);
+      }
+    },
   })
 );

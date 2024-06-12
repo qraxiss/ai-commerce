@@ -4,6 +4,15 @@
 
 import { factories } from "@strapi/strapi";
 import { getId } from "../../../helpers/id";
+import axios from "axios";
+
+const makeSuggest = async (items: string[]) => {
+  return (
+    await axios.post("http://127.0.0.1:8000/apriori", {
+      basket: items,
+    })
+  ).data;
+};
 
 const services = () => ({
   async payment() {
@@ -67,6 +76,15 @@ const services = () => ({
         },
       })
     ).orders;
+  },
+
+  async makeSuggest() {
+    const cart = await strapi.service("api::cart.cart").userCart();
+    console.log(cart);
+
+    const items = cart.products.map((item) => item.translate);
+
+    return await makeSuggest(items);
   },
 });
 
