@@ -16,12 +16,24 @@ const makeSuggest = async (items: string[]) => {
 
 const services = () => ({
   async payment() {
-    console.log(getId())
+    console.log(getId());
 
     const { id: cart, products } = await strapi
       .service("api::cart.cart")
       .userCart();
 
+    const stockUpdate = Promise.all(
+      products.map((product) =>
+        strapi.db.query("api::product.product").update({
+          where: {
+            id: product.id,
+          },
+          data: {
+            stock: product.stock - 1,
+          },
+        })
+      )
+    );
 
     if (products.length === 0) {
       throw new Error("There is no item on cart!");
@@ -58,6 +70,7 @@ const services = () => ({
       },
     });
 
+    await stockUpdate;
     return order;
   },
 
@@ -84,17 +97,15 @@ const services = () => ({
 
     const items = cart.products.map((item) => item.translate);
 
-    const {recommended_item: translate} = await makeSuggest(items);
-
-  
+    const { recommended_item: translate } = await makeSuggest(items);
 
     return await strapi.db.query("api::product.product").findOne({
       where: {
-        translate
+        translate,
       },
       populate: {
-        image: "*"
-      }
+        image: "*",
+      },
     });
   },
 });
