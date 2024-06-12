@@ -84,7 +84,18 @@ const services = () => ({
 
     const items = cart.products.map((item) => item.translate);
 
-    return await makeSuggest(items);
+    const {recommended_item: translate} = await makeSuggest(items);
+
+  
+
+    return await strapi.db.query("api::product.product").findOne({
+      where: {
+        translate
+      },
+      populate: {
+        image: "*"
+      }
+    });
   },
 });
 
