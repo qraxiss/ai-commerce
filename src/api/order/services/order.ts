@@ -7,9 +7,12 @@ import { getId } from "../../../helpers/id";
 
 const services = () => ({
   async payment() {
+    console.log(getId())
+
     const { id: cart, products } = await strapi
       .service("api::cart.cart")
       .userCart();
+
 
     if (products.length === 0) {
       throw new Error("There is no item on cart!");
@@ -19,6 +22,13 @@ const services = () => ({
       data: {
         cart,
         user: getId(),
+      },
+    });
+
+    // empty user's cart
+    await strapi.entityService.update("api::cart.cart", cart, {
+      data: {
+        products: [],
       },
     });
 
